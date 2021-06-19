@@ -11,6 +11,10 @@ service KeyManagerRegistraGrpcService {
   rpc registra(RegistraChavePixRequest) returns (RegistraChavePixResponse) {}
 }
 
+service KeymanagerRemoveGrpcService {
+  rpc remove(RemoveChavePixRequest) returns (RemoveChavePixResponse) {}
+}
+
 //Enum para o tipo de chave a ser cadastrado
 //UNKNOWN é para não deixarmos o default como algum tipo valido do nosso sistema
 enum TipoDeChave {
@@ -39,6 +43,18 @@ message RegistraChavePixRequest {
 
 //resposta que deve ser retornado pelo sistema
 message RegistraChavePixResponse {
+  string clienteId = 1;
+  string pixId     = 2;
+}
+
+//Requisitos para remover  uma chave pix
+message RemoveChavePixRequest {
+  string clienteId = 1;
+  string pixId     = 2;
+}
+
+//resposta que deve ser retornado pelo sistema
+message RemoveChavePixResponse {
   string clienteId = 1;
   string pixId     = 2;
 }

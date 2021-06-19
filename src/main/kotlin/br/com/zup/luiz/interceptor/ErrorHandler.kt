@@ -1,4 +1,4 @@
-package br.com.zup.luiz.exceptions
+package br.com.zup.luiz.interceptor
 
 import io.micronaut.aop.Around
 import io.micronaut.context.annotation.Type

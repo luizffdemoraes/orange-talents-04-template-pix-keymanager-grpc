@@ -1,4 +1,4 @@
-package br.com.zup.luiz.exceptions
+package br.com.zup.luiz.interceptor
 
 import io.grpc.BindableService
 import io.grpc.stub.StreamObserver

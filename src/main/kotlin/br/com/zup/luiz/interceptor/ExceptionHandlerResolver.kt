@@ -1,4 +1,4 @@
-package br.com.zup.luiz.exceptions
+package br.com.zup.luiz.interceptor
 
 import javax.inject.Inject
 import javax.inject.Singleton

@@ -1,5 +1,6 @@
-package br.com.zup.luiz.exceptions
+package br.com.zup.luiz.interceptor
 
+import br.com.zup.luiz.exceptions.ChavePixExistenteException
 import io.grpc.Status
 
 import javax.validation.ConstraintViolationException

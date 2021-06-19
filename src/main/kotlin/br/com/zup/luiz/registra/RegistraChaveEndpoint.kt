@@ -3,11 +3,12 @@ package br.com.zup.luiz.registra
 import br.com.zup.luiz.KeyManagerRegistraGrpcServiceGrpc
 import br.com.zup.luiz.RegistraChavePixRequest
 import br.com.zup.luiz.RegistraChavePixResponse
+import br.com.zup.luiz.interceptor.ErrorHandler
 import io.grpc.stub.StreamObserver
 import javax.inject.Inject
 import javax.inject.Singleton
 
-//@ErrorHandler //anotacao criada para fazer com que meu interceptor intercepte os metodos dessa classe
+@ErrorHandler //anotacao criada para fazer com que meu interceptor intercepte os metodos dessa classe
 @Singleton
 //injetamos nosso service, para realizar as validacoes da bean validation e salvar nossa chave
 class RegistraChaveEndpoint(@Inject private val service: NovaChavePixService)

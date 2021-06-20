@@ -11,7 +11,7 @@ service KeyManagerRegistraGrpcService {
   rpc registra(RegistraChavePixRequest) returns (RegistraChavePixResponse) {}
 }
 
-service KeymanagerRemoveGrpcService {
+service KeyManagerRemoveGrpcService {
   rpc remove(RemoveChavePixRequest) returns (RemoveChavePixResponse) {}
 }
 

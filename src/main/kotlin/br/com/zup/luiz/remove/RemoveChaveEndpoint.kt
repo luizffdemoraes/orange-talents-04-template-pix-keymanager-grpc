@@ -1,6 +1,6 @@
 package br.com.zup.luiz.remove
 
-import br.com.zup.luiz.KeymanagerRemoveGrpcServiceGrpc
+import br.com.zup.luiz.KeyManagerRemoveGrpcServiceGrpc
 import br.com.zup.luiz.RemoveChavePixRequest
 import br.com.zup.luiz.RemoveChavePixResponse
 import br.com.zup.luiz.interceptor.ErrorHandler
@@ -10,22 +10,18 @@ import javax.inject.Singleton
 
 @ErrorHandler
 @Singleton
-class RemoveChaveEndpoint(@Inject private val service : RemoveChavePixService)
-    : KeymanagerRemoveGrpcServiceGrpc.KeymanagerRemoveGrpcServiceImplBase() {
+class RemoveChaveEndpoint(@Inject private val service: RemoveChaveService)
+    : KeyManagerRemoveGrpcServiceGrpc.KeyManagerRemoveGrpcServiceImplBase() {
 
-    override fun remove(
-        request: RemoveChavePixRequest,
-        responseObserver: StreamObserver<RemoveChavePixResponse>
-    ) {
+    override fun remove(request: RemoveChavePixRequest, responseObserver: StreamObserver<RemoveChavePixResponse>) {
 
-        service.remove(request.pixId, request.clienteId)
+        service.remove(clienteId = request.clienteId, pixId = request.pixId)
 
-        val chaveRemovida = RemoveChavePixResponse.newBuilder()
+        responseObserver.onNext(RemoveChavePixResponse.newBuilder()
             .setClienteId(request.clienteId)
             .setPixId(request.pixId)
-            .build()
+            .build())
 
-        responseObserver.onNext(chaveRemovida)
         responseObserver.onCompleted()
     }
 }

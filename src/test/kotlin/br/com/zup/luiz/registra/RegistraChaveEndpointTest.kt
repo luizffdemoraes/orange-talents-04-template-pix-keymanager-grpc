@@ -84,7 +84,7 @@ internal class RegistraChaveEndPointTest(
 //    @Test
 //    internal fun `deve cadastrar uma nova chave pix Aleatoria`() {
 //        val request = RegistraChavePixRequest.newBuilder()
-//            .setClienteId(CLIENT_ID.toString())
+//            .setClienteId(CLIENTE_ID.toString())
 //            .setTipoDeChave(TipoDeChave.ALEATORIA)
 //            .setChave("")
 //            .setTipoDeConta(TipoDeConta.CONTA_CORRENTE)
@@ -95,7 +95,7 @@ internal class RegistraChaveEndPointTest(
 //            instituicao = InstituicaoResponse("ITAÚ UNIBANCO S.A", "60701190"),
 //            agencia = "0001",
 //            numero = "000000",
-//            titular = TitularResponse(CLIENT_ID.toString(), "Rafael Ponte", "33333333333")
+//            titular = TitularResponse(CLIENTE_ID.toString(), "Rafael Ponte", "33333333333")
 //        )
 //
 //        `when`(itauClient.buscaContaPorTipo(request.clienteId, request.tipoDeConta.name))
@@ -105,7 +105,7 @@ internal class RegistraChaveEndPointTest(
 //
 //        with(response) {
 //            assertNotNull(pixId)
-//            assertEquals(CLIENT_ID.toString(), clienteId)
+//            assertEquals(CLIENTE_ID.toString(), clienteId)
 //        }
 //    }
 

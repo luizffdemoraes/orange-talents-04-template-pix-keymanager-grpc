@@ -7,12 +7,18 @@ option objc_class_prefix = "HLW";
 
 package br.com.zup.luiz;
 
+import "google/protobuf/timestamp.proto";
+
 service KeyManagerRegistraGrpcService {
   rpc registra(RegistraChavePixRequest) returns (RegistraChavePixResponse) {}
 }
 
 service KeyManagerRemoveGrpcService {
   rpc remove(RemoveChavePixRequest) returns (RemoveChavePixResponse) {}
+}
+
+service KeyManagerCarregaGrpcService {
+  rpc carrega(CarregaChavePixRequest) returns (CarregaChavePixResponse) {}
 }
 
 //Enum para o tipo de chave a ser cadastrado
@@ -57,4 +63,44 @@ message RemoveChavePixRequest {
 message RemoveChavePixResponse {
   string clienteId = 1;
   string pixId     = 2;
+}
+
+//Requisitos para carregar uma chave pix
+message CarregaChavePixRequest {
+  // mensagem aninhada
+  message FiltroPorPixId{
+    string clienteId = 1;
+    string pixId     = 2;
+  }
+
+  // oneof - nunca é pesquisado pelos dois campos
+  oneof filtro {
+    FiltroPorPixId pixId = 1;
+    string chave   = 2;
+  }
+}
+
+//resposta que deve ser retornado pelo sistema
+message CarregaChavePixResponse {
+
+  message ChavePix {
+
+    message ContaInfo {
+      TipoDeConta tipo     = 1;
+      string instituicao   = 2; /** ITAU UNIBANCO */
+      string nomeDoTitular = 3;
+      string cpfDoTitular  = 4;
+      string agencia       = 5;
+      string numeroDaConta = 6;
+    }
+
+    TipoDeChave tipo        = 1;
+    string chave            = 2;
+    ContaInfo conta         = 3;
+    google.protobuf.Timestamp criadaEm = 4;
+  }
+
+  string clienteId = 1;
+  string pixId     = 2;
+  ChavePix chave   = 3;
 }

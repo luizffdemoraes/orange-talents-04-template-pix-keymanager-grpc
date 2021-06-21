@@ -3,13 +3,11 @@ package br.com.zup.luiz.registra
 import br.com.zup.luiz.KeyManagerRegistraGrpcServiceGrpc
 import br.com.zup.luiz.RegistraChavePixRequest
 import br.com.zup.luiz.TipoDeChave
-import br.com.zup.luiz.TipoDeChave.*
-import br.com.zup.luiz.pix.TipoDeChave.*
 import br.com.zup.luiz.TipoDeConta
-import br.com.zup.luiz.externo.DadosDaContaResponse
-import br.com.zup.luiz.externo.InstituicaoResponse
-import br.com.zup.luiz.externo.ItauClient
-import br.com.zup.luiz.externo.TitularResponse
+import br.com.zup.luiz.integration.itau.DadosDaContaResponse
+import br.com.zup.luiz.integration.itau.InstituicaoResponse
+import br.com.zup.luiz.integration.itau.ItauClient
+import br.com.zup.luiz.integration.itau.TitularResponse
 import br.com.zup.luiz.pix.ChavePix
 import br.com.zup.luiz.pix.ChavePixRepository
 import br.com.zup.luiz.pix.ContaAssociada

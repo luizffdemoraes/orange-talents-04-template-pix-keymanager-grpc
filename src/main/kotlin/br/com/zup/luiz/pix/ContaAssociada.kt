@@ -25,6 +25,11 @@ class ContaAssociada(
 ) {
 
     companion object {
-        public val ISPB: String = "60701190"
+        val ITAU_UNIBANCO_ISPB: String = "60701190"
+    }
+
+    override fun toString(): String {
+        return "Instituicao: $instituicao, \nTitular: $nomeDoTitular, \nCPF: $cpfDoTitular,  " +
+                "\nAgencia: $agencia, \nNumero: $numeroDaConta, \nISPB: $ITAU_UNIBANCO_ISPB"
     }
 }

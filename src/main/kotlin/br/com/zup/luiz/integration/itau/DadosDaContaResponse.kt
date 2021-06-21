@@ -1,4 +1,4 @@
-package br.com.zup.luiz.externo
+package br.com.zup.luiz.integration.itau
 
 import br.com.zup.luiz.pix.ContaAssociada
 

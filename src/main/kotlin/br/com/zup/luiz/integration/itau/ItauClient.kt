@@ -1,4 +1,4 @@
-package br.com.zup.luiz.externo
+package br.com.zup.luiz.integration.itau
 
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Get

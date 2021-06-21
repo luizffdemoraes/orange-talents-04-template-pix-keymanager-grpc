@@ -79,6 +79,53 @@ internal class RegistraChaveEndPointTest(
         }
     }
 
+//    @Test
+//    fun `deve registrar nova chave pix (ALEATORIO)`() {
+//        // cenário
+//        `when`(itauClient.buscaContaPorTipo(clienteId = CLIENTE_ID.toString(), tipo = "CONTA_CORRENTE"))
+//            .thenReturn(HttpResponse.ok(dadosDaContaRespose()))
+//
+//        `when`(bcbClient.create(createPixKeyRequest()))
+//            .thenReturn(HttpResponse.created(createPixKeyResponse()))
+//
+//        // ação
+//        val response = grpcClient.registra(RegistraChavePixRequest.newBuilder()
+//            .setClienteId(CLIENTE_ID.toString())
+//            .setTipoDeChave(TipoDeChave.ALEATORIA)
+//            .setTipoDeConta(TipoDeConta.CONTA_CORRENTE)
+//            .build())
+//
+//        // validação
+//        with(response) {
+//            assertEquals(CLIENTE_ID.toString(), clienteId)
+//            assertNotNull(pixId)
+//        }
+//    }
+
+//    @Test
+//    fun `deve registrar nova chave pix (CPF)`() {
+//        // cenário
+//        `when`(itauClient.buscaContaPorTipo(clienteId = CLIENTE_ID.toString(), tipo = "CONTA_CORRENTE"))
+//            .thenReturn(HttpResponse.ok(dadosDaContaRespose()))
+//
+//        `when`(bcbClient.create(createPixKeyRequest()))
+//            .thenReturn(HttpResponse.created(createPixKeyResponse()))
+//
+//        // ação
+//        val response = grpcClient.registra(RegistraChavePixRequest.newBuilder()
+//            .setClienteId(CLIENTE_ID.toString())
+//            .setTipoDeChave(TipoDeChave.CPF)
+//            .setChave("39101036858")
+//            .setTipoDeConta(TipoDeConta.CONTA_CORRENTE)
+//            .build())
+//
+//        // validação
+//        with(response) {
+//            assertEquals(CLIENTE_ID.toString(), clienteId)
+//            assertNotNull(pixId)
+//        }
+//    }
+
 
     // Vou analisar mais
 //    @Test

@@ -14,21 +14,21 @@ import javax.validation.Validator
 @ErrorHandler // 1
 @Singleton
 class CarregaChaveEndpoint(
-    @Inject private val repository: ChavePixRepository, // 1
-    @Inject private val bcbClient: BancoCentralClient, // 1
+    @Inject private val repository: ChavePixRepository,
+    @Inject private val bcbClient: BancoCentralClient,
     @Inject private val validator: Validator,
-) : KeyManagerCarregaGrpcServiceGrpc.KeyManagerCarregaGrpcServiceImplBase() { // 1
+) : KeyManagerCarregaGrpcServiceGrpc.KeyManagerCarregaGrpcServiceImplBase() {
 
-    // 9
+
     override fun carrega(
-        request: CarregaChavePixRequest, // 1
-        responseObserver: StreamObserver<CarregaChavePixResponse>, // 1
+        request: CarregaChavePixRequest,
+        responseObserver: StreamObserver<CarregaChavePixResponse>,
     ) {
 
-        val filtro = request.toModel(validator) // 2
+        val filtro = request.toModel(validator)
         val chaveInfo = filtro.filtra(repository = repository, bcbClient = bcbClient)
 
-        responseObserver.onNext(CarregaChavePixResponseConverter().convert(chaveInfo)) // 1
+        responseObserver.onNext(CarregaChavePixResponseConverter().convert(chaveInfo))
         responseObserver.onCompleted()
     }
 }

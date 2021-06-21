@@ -21,6 +21,12 @@ service KeyManagerCarregaGrpcService {
   rpc carrega(CarregaChavePixRequest) returns (CarregaChavePixResponse) {}
 }
 
+service KeyManagerListaGrpcService {
+
+  rpc lista(ListaChavesPixRequest) returns (ListaChavesPixResponse) {}
+
+}
+
 //Enum para o tipo de chave a ser cadastrado
 //UNKNOWN é para não deixarmos o default como algum tipo valido do nosso sistema
 enum TipoDeChave {
@@ -103,4 +109,25 @@ message CarregaChavePixResponse {
   string clienteId = 1;
   string pixId     = 2;
   ChavePix chave   = 3;
+}
+
+/**
+ * Lista chaves
+ */
+message ListaChavesPixRequest {
+  string clienteId = 1;
+}
+
+message ListaChavesPixResponse {
+
+  message ChavePix {
+    string pixId            = 1;
+    TipoDeChave tipo        = 2;
+    string chave            = 3;
+    TipoDeConta tipoDeConta = 4;
+    google.protobuf.Timestamp criadaEm = 5;
+  }
+
+  string clienteId         = 1;
+  repeated ChavePix chaves = 2;
 }

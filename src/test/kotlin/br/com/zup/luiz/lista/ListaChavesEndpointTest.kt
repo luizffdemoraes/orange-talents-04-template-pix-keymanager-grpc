@@ -42,6 +42,12 @@ internal class ListaChavesEndpointTest(
     val repository: ChavePixRepository,
     val grpcClient: KeyManagerListaGrpcServiceGrpc.KeyManagerListaGrpcServiceBlockingStub,
 ) {
+    @Inject
+    lateinit var bcbClient: BancoCentralClient
+    lateinit var chave1: ChavePix
+    lateinit var chave2: ChavePix
+    lateinit var chave3: ChavePix
+    lateinit var listaDeChaves: List<ChavePix>
 
     companion object {
         val CLIENTE_ID = UUID.randomUUID()
@@ -52,10 +58,13 @@ internal class ListaChavesEndpointTest(
      */
     @BeforeEach
     fun setup() {
-        repository.save(chave(tipo = TipoDeChave.EMAIL, chave = "rafael.ponte@zup.com.br", clienteId = CLIENTE_ID))
-        repository.save(chave(tipo = TipoDeChave.ALEATORIA, chave = "randomkey-2", clienteId = UUID.randomUUID()))
-        repository.save(chave(tipo = TipoDeChave.ALEATORIA, chave = "randomkey-3", clienteId = CLIENTE_ID))
+        chave1 = repository.save(chave(tipo = TipoDeChave.EMAIL, chave = "rafael.ponte@zup.com.br", clienteId = CLIENTE_ID))
+        chave2 = repository.save(chave(tipo = TipoDeChave.CPF, chave = "41790066644", clienteId = CLIENTE_ID))
+        chave3 = repository.save(chave(tipo = TipoDeChave.CELULAR, chave = "+55 9 88888888", clienteId = CLIENTE_ID))
+        listaDeChaves = listOf(chave1, chave2, chave3)
     }
+
+
 
     /**
      * TIP: por padrão roda numa transação isolada
@@ -76,16 +85,13 @@ internal class ListaChavesEndpointTest(
             .build())
 
         // validação
-        with (response.chavesList) {
-            assertThat(this, hasSize(2))
-            assertThat(
-                this.map { Pair(it.tipo, it.chave) }.toList(),
-                containsInAnyOrder(
-                    Pair(TipoDeChave.ALEATORIA, "randomkey-3"),
-                    Pair(TipoDeChave.EMAIL, "rafael.ponte@zup.com.br")
-                )
-            )
+
+        with(response.chavesList) {
+            forEachIndexed{index,elem->
+                assertEquals(this.get(index).chave,listaDeChaves.get(index).chave)
+            }
         }
+
     }
 
     /**

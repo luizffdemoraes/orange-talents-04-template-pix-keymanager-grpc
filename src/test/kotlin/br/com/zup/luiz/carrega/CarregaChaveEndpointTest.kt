@@ -9,7 +9,6 @@ import br.com.zup.luiz.pix.ChavePix
 import br.com.zup.luiz.pix.ChavePixRepository
 import br.com.zup.luiz.pix.ContaAssociada
 import br.com.zup.luiz.pix.TipoDeChave
-import org.junit.jupiter.api.Assertions.*
 import io.grpc.ManagedChannel
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
@@ -89,33 +88,56 @@ internal class CarregaChaveEndpointTest(
         }
     }
 
-//    @Test
-//    fun `nao deve carregar chave por pixId e clienteId quando filtro invalido`() {
-//        // ação
-//        val thrown = assertThrows<StatusRuntimeException> {
-//            grpcClient.carrega(CarregaChavePixRequest.newBuilder()
-//                .setPixId(CarregaChavePixRequest.FiltroPorPixId.newBuilder()
-//                    .setPixId("")
-//                    .setClienteId("")
-//                    .build()
-//                ).build())
-//        }
-//
-//        // validação
-//        with(thrown) {
-//            assertEquals(Status.INVALID_ARGUMENT.code, status.code)
-//            assertEquals("Chave Pix não encontrada", status.description)
-//            assertThat(
-//                violations(), containsInAnyOrder(
-//                    Pair("pixId", "não deve estar em branco"),
-//                    Pair("clientId", "não deve estar em branco"),
-//                    Pair("pixId", "não é um formato válido de UUID"),
-//                    Pair("clientId", "não é um formato válido de UUID"),
-//                )
-//            )
-//        }
-//    }
 
+    @Test
+    fun `nao deve carregar chave por pixId e clienteId quando filtro invalido`() {
+        // ação
+        val thrown = assertThrows<StatusRuntimeException> {
+            grpcClient.carrega(
+                CarregaChavePixRequest.newBuilder()
+                    .setPixId(
+                        CarregaChavePixRequest.FiltroPorPixId
+                            .newBuilder()
+                            .setPixId("")
+                            .setClienteId("")
+                            .build()
+                    ).build()
+            )
+        }
+
+        // validação
+        with(thrown) {
+            assertEquals(Status.INVALID_ARGUMENT.code, status.code)
+            assertEquals("Dados inválidos", status.description)
+            assertThat(
+                violations(), containsInAnyOrder(
+                    Pair("pixId", "não deve estar em branco"),
+                    Pair("clientId", "não deve estar em branco"),
+                    Pair("pixId", "não é um formato válido de UUID"),
+                    Pair("clientId", "não é um formato válido de UUID"),
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `nao deve carregar chave por valor da chave quando filtro invalido`() {
+        // ação
+        val thrown = assertThrows<StatusRuntimeException> {
+            grpcClient.carrega(CarregaChavePixRequest.newBuilder().setChave("").build())
+        }
+
+        // validação
+        with(thrown) {
+            assertEquals(Status.INVALID_ARGUMENT.code, status.code)
+            assertEquals("Dados inválidos", status.description)
+            assertThat(
+                violations(), containsInAnyOrder(
+                    Pair("chave", "não deve estar em branco"),
+                )
+            )
+        }
+    }
 
     @Test
     fun `nao deve carregar chave por pixId e clienteId quando registro nao existir`() {
@@ -195,23 +217,6 @@ internal class CarregaChaveEndpointTest(
         with(thrown) {
             assertEquals(Status.NOT_FOUND.code, status.code)
             assertEquals("Chave Pix não encontrada", status.description)
-        }
-    }
-
-    @Test
-    fun `nao deve carregar chave por valor da chave quando filtro invalido`() {
-        // ação
-        val thrown = assertThrows<StatusRuntimeException> {
-            grpcClient.carrega(CarregaChavePixRequest.newBuilder().setChave("").build())
-        }
-
-        // validação
-        with(thrown) {
-            assertEquals(Status.INVALID_ARGUMENT.code, status.code)
-            assertEquals("Dados inválidos", status.description)
-            assertThat(violations(), containsInAnyOrder(
-                Pair("chave", "must not be blank"),
-            ))
         }
     }
 

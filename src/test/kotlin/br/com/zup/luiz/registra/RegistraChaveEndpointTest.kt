@@ -1,5 +1,6 @@
 package br.com.zup.luiz.registra
 
+
 import br.com.zup.luiz.KeyManagerRegistraGrpcServiceGrpc
 import br.com.zup.luiz.RegistraChavePixRequest
 import br.com.zup.luiz.TipoDeChave
@@ -79,14 +80,39 @@ internal class RegistraChaveEndPointTest(
         }
     }
 
+    @Test
+    fun `deve registrar nova chave pix (CPF)`() {
+        // cenário
+        `when`(itauClient.buscaContaPorTipo(clienteId = CLIENTE_ID.toString(), tipo = "CONTA_CORRENTE"))
+            .thenReturn(HttpResponse.ok(dadosDaContaRespose()))
+
+        `when`(bcbClient.create(createPixKeyCPFRequest()))
+            .thenReturn(HttpResponse.created(createPixKeyCPFResponse()))
+
+        // ação
+        val response = grpcClient.registra(RegistraChavePixRequest.newBuilder()
+            .setClienteId(CLIENTE_ID.toString())
+            .setTipoDeChave(TipoDeChave.CPF)
+            .setChave("39101036858")
+            .setTipoDeConta(TipoDeConta.CONTA_CORRENTE)
+            .build())
+
+        // validação
+        with(response) {
+            assertEquals(CLIENTE_ID.toString(), clienteId)
+            assertNotNull(pixId)
+        }
+    }
+
+
 //    @Test
 //    fun `deve registrar nova chave pix (ALEATORIO)`() {
 //        // cenário
 //        `when`(itauClient.buscaContaPorTipo(clienteId = CLIENTE_ID.toString(), tipo = "CONTA_CORRENTE"))
 //            .thenReturn(HttpResponse.ok(dadosDaContaRespose()))
 //
-//        `when`(bcbClient.create(createPixKeyRequest()))
-//            .thenReturn(HttpResponse.created(createPixKeyResponse()))
+//        `when`(bcbClient.create(createPixKeyAleatorioRequest()))
+//            .thenReturn(HttpResponse.created(createPixKeyAleatorioResponse()))
 //
 //        // ação
 //        val response = grpcClient.registra(RegistraChavePixRequest.newBuilder()
@@ -101,31 +127,6 @@ internal class RegistraChaveEndPointTest(
 //            assertNotNull(pixId)
 //        }
 //    }
-
-//    @Test
-//    fun `deve registrar nova chave pix (CPF)`() {
-//        // cenário
-//        `when`(itauClient.buscaContaPorTipo(clienteId = CLIENTE_ID.toString(), tipo = "CONTA_CORRENTE"))
-//            .thenReturn(HttpResponse.ok(dadosDaContaRespose()))
-//
-//        `when`(bcbClient.create(createPixKeyRequest()))
-//            .thenReturn(HttpResponse.created(createPixKeyResponse()))
-//
-//        // ação
-//        val response = grpcClient.registra(RegistraChavePixRequest.newBuilder()
-//            .setClienteId(CLIENTE_ID.toString())
-//            .setTipoDeChave(TipoDeChave.CPF)
-//            .setChave("39101036858")
-//            .setTipoDeConta(TipoDeConta.CONTA_CORRENTE)
-//            .build())
-//
-//        // validação
-//        with(response) {
-//            assertEquals(CLIENTE_ID.toString(), clienteId)
-//            assertNotNull(pixId)
-//        }
-//    }
-
 
     // Vou analisar mais
 //    @Test
@@ -296,7 +297,7 @@ internal class RegistraChaveEndPointTest(
             return KeyManagerRegistraGrpcServiceGrpc.newBlockingStub(channel)
         }
     }
-     fun dadosDaContaRespose(): DadosDaContaResponse {
+    fun dadosDaContaRespose(): DadosDaContaResponse {
         return DadosDaContaResponse(
             tipo = "CONTA_CORRENTE",
             instituicao = InstituicaoResponse("UNIBANCO ITAU SA", ContaAssociada.ITAU_UNIBANCO_ISPB),
@@ -306,7 +307,7 @@ internal class RegistraChaveEndPointTest(
         )
     }
 
-     fun createPixKeyRequest(): CreatePixKeyRequest {
+    fun createPixKeyRequest(): CreatePixKeyRequest {
         return CreatePixKeyRequest(
             keyType = PixKeyType.EMAIL,
             key = "rponte@gmail.com",
@@ -315,7 +316,7 @@ internal class RegistraChaveEndPointTest(
         )
     }
 
-     fun createPixKeyResponse(): CreatePixKeyResponse {
+    fun createPixKeyResponse(): CreatePixKeyResponse {
         return CreatePixKeyResponse(
             keyType = PixKeyType.EMAIL,
             key = "rponte@gmail.com",
@@ -325,7 +326,46 @@ internal class RegistraChaveEndPointTest(
         )
     }
 
-     fun bankAccount(): BankAccount {
+
+    fun createPixKeyCPFRequest(): CreatePixKeyRequest {
+        return CreatePixKeyRequest(
+            keyType = PixKeyType.CPF,
+            key = "39101036858",
+            bankAccount = bankAccount(),
+            owner = owner()
+        )
+    }
+
+    fun createPixKeyCPFResponse(): CreatePixKeyResponse {
+        return CreatePixKeyResponse(
+            keyType = PixKeyType.CPF,
+            key = "39101036858",
+            bankAccount = bankAccount(),
+            owner = owner(),
+            createdAt = LocalDateTime.now()
+        )
+    }
+
+    fun createPixKeyAleatorioRequest(): CreatePixKeyRequest {
+        return CreatePixKeyRequest(
+            keyType = PixKeyType.RANDOM,
+            key = "",
+            bankAccount = bankAccount(),
+            owner = owner()
+        )
+    }
+
+    fun createPixKeyAleatorioResponse(): CreatePixKeyResponse {
+        return CreatePixKeyResponse(
+            keyType = PixKeyType.RANDOM,
+            key = "e01ac82c-c03f-44f3-b261-7b9500cc9b6f'",
+            bankAccount = bankAccount(),
+            owner = owner(),
+            createdAt = LocalDateTime.now()
+        )
+    }
+
+    fun bankAccount(): BankAccount {
         return BankAccount(
             participant = ContaAssociada.ITAU_UNIBANCO_ISPB,
             branch = "1218",
@@ -334,7 +374,7 @@ internal class RegistraChaveEndPointTest(
         )
     }
 
-     fun owner(): Owner {
+    fun owner(): Owner {
         return Owner(
             type = Owner.OwnerType.NATURAL_PERSON,
             name = "Rafael Ponte",
@@ -342,7 +382,7 @@ internal class RegistraChaveEndPointTest(
         )
     }
 
-     fun chave(
+    fun chave(
         tipoDeChave: br.com.zup.luiz.pix.TipoDeChave,
         chave: String = UUID.randomUUID().toString(),
         clienteId: UUID = UUID.randomUUID(),

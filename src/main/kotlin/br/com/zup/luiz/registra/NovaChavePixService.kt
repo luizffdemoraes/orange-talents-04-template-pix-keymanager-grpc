@@ -34,7 +34,7 @@ class NovaChavePixService(
             throw ChavePixExistenteException("Chave Pix '${novaChave.chave}' existente")
 
         // 2. Busca dados da conta no ERP do ITAU - se não retornar um body, requisicao falhou, throws exception
-        val response = itauClient.buscaContaPorTipo(novaChave.clienteId, novaChave.tipoDeConta!!.name)
+        val response = itauClient.buscaContaPorTipo(novaChave.clienteId!!, novaChave.tipoDeConta!!.name)
         val conta = response.body()?.toModel() ?: throw IllegalStateException("Cliente não encontrado no Itau")
 
         // 3. Grava no banco de dados

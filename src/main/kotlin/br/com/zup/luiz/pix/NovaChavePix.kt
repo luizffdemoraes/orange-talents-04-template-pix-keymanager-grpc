@@ -11,10 +11,10 @@ import javax.validation.constraints.*
 @Introspected
 data class NovaChavePix(
     @ValidUUID
-    @field:NotBlank val clienteId: String,
+    @field:NotBlank val clienteId: String?,
     @field:NotNull val tipoDeChave: TipoDeChave?,
     @field:NotNull val tipoDeConta: TipoDeConta?,
-    @field:Size(max = 77) val chave: String
+    @field:Size(max = 77) val chave: String?
 ) {
 
     fun toModel(conta: ContaAssociada): ChavePix{
@@ -22,7 +22,7 @@ data class NovaChavePix(
             clienteId = UUID.fromString(this.clienteId),
             tipoDeChave = TipoDeChave.valueOf(this.tipoDeChave!!.name),
             tipoDeConta = TipoDeConta.valueOf(this.tipoDeConta!!.name),
-            chave = if(this.tipoDeChave == TipoDeChave.ALEATORIA) UUID.randomUUID().toString() else this.chave,
+            chave = if(this.tipoDeChave == TipoDeChave.ALEATORIA) UUID.randomUUID().toString() else this.chave!!,
             conta = conta
         )
     }

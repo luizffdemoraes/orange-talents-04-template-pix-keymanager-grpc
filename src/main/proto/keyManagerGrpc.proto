@@ -22,9 +22,7 @@ service KeyManagerCarregaGrpcService {
 }
 
 service KeyManagerListaGrpcService {
-
   rpc lista(ListaChavesPixRequest) returns (ListaChavesPixResponse) {}
-
 }
 
 //Enum para o tipo de chave a ser cadastrado

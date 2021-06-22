@@ -102,7 +102,7 @@ internal class RemoveChaveEndpointTest(
 
 
         @Test
-    internal fun `nao deve remover chave pix quando nao existente`() {
+     fun `nao deve remover chave pix quando nao existente`() {
         val pixIdNaoExistente = UUID.randomUUID().toString()
 
         // acao

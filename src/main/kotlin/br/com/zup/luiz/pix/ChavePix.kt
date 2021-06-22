@@ -39,6 +39,7 @@ class ChavePix(
     @Id
     @GeneratedValue
     val id: UUID? = null
+    @Column(nullable = false)
     val criadaEm: LocalDateTime = LocalDateTime.now()
 
     override fun toString(): String {
@@ -48,7 +49,10 @@ class ChavePix(
 
     fun isAleatoria(): Boolean = tipoDeChave == TipoDeChave.ALEATORIA
 
-    fun pertenceAo(clienteId: UUID) = this.clienteId == clienteId
+    /**
+     * Verifica se esta chave pertence a este cliente
+     */
+    fun pertenceAo(clienteId: UUID) = this.clienteId.equals(clienteId)
 
     fun atualiza(key: String): Boolean {
         if (isAleatoria()) {

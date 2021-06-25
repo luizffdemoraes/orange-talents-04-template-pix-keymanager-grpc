@@ -35,6 +35,8 @@ import java.time.LocalDateTime
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
+import org.mockito.ArgumentMatchers.anyString
+import org.mockito.kotlin.any
 
 @MicronautTest(transactional = false)
 internal class RegistraChaveEndPointTest(
@@ -112,7 +114,7 @@ internal class RegistraChaveEndPointTest(
 //            .thenReturn(HttpResponse.ok(dadosDaContaRespose()))
 //
 //        `when`(bcbClient.create(createPixKeyAleatorioRequest()))
-//            .thenReturn(HttpResponse.created(createPixKeyAleatorioResponse()))
+//            .thenReturn(HttpResponse.created(createPixKeyAleatorioResponseDiferente()))
 //
 //        // ação
 //        val response = grpcClient.registra(RegistraChavePixRequest.newBuilder()
@@ -127,6 +129,30 @@ internal class RegistraChaveEndPointTest(
 //            assertNotNull(pixId)
 //        }
 //    }
+
+
+    @Test
+    fun `deve registrar nova chave pix (ALEATORIO) com any no request`() {
+        // cenário
+        `when`(itauClient.buscaContaPorTipo(clienteId = CLIENTE_ID.toString(), tipo = "CONTA_CORRENTE"))
+            .thenReturn(HttpResponse.ok(dadosDaContaRespose()))
+
+        `when`(bcbClient.create(any()))
+            .thenReturn(HttpResponse.created(createPixKeyAleatorioResponse()))
+
+        // ação
+        val response = grpcClient.registra(RegistraChavePixRequest.newBuilder()
+            .setClienteId(CLIENTE_ID.toString())
+            .setTipoDeChave(TipoDeChave.ALEATORIA)
+            .setTipoDeConta(TipoDeConta.CONTA_CORRENTE)
+            .build())
+
+        // validação
+        with(response) {
+            assertEquals(CLIENTE_ID.toString(), clienteId)
+            assertNotNull(pixId)
+        }
+    }
 
     // Vou analisar mais
 //    @Test
@@ -349,7 +375,7 @@ internal class RegistraChaveEndPointTest(
     fun createPixKeyAleatorioRequest(): CreatePixKeyRequest {
         return CreatePixKeyRequest(
             keyType = PixKeyType.RANDOM,
-            key = "",
+            key = anyString(), //aceitar qualquer coisa
             bankAccount = bankAccount(),
             owner = owner()
         )
@@ -358,7 +384,17 @@ internal class RegistraChaveEndPointTest(
     fun createPixKeyAleatorioResponse(): CreatePixKeyResponse {
         return CreatePixKeyResponse(
             keyType = PixKeyType.RANDOM,
-            key = "e01ac82c-c03f-44f3-b261-7b9500cc9b6f'",
+            key = "e01ac82c-c03f-44f3-b261-7b9500cc9b6f",
+            bankAccount = bankAccount(),
+            owner = owner(),
+            createdAt = LocalDateTime.now()
+        )
+    }
+
+    fun createPixKeyAleatorioResponseDiferente(): CreatePixKeyResponse {
+        return CreatePixKeyResponse(
+            keyType = PixKeyType.RANDOM,
+            key = "e01ac82c-c03f-44f3-b261-7b9500cc9b6f",
             bankAccount = bankAccount(),
             owner = owner(),
             createdAt = LocalDateTime.now()
@@ -367,7 +403,7 @@ internal class RegistraChaveEndPointTest(
 
     fun bankAccount(): BankAccount {
         return BankAccount(
-            participant = ContaAssociada.ITAU_UNIBANCO_ISPB,
+            participant = "60701190",
             branch = "1218",
             accountNumber = "291900",
             accountType = BankAccount.AccountType.CACC

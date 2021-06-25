@@ -65,6 +65,7 @@ dependencies {
     testImplementation("io.micronaut.test:micronaut-test-junit5:2.3.2")
     testImplementation("com.h2database:h2")
     testImplementation("org.hamcrest:hamcrest-core:2.2")
+    testImplementation ("org.mockito.kotlin:mockito-kotlin:3.2.0")
 
     //XML
     implementation("io.micronaut.xml:micronaut-jackson-xml")

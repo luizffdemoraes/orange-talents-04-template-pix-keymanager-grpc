@@ -17,8 +17,8 @@ services:
       DB_USER: postgres
       DB_PASSWORD: root
       DB_DIALECT: POSTGRES
-      BCB_URL: http://bcb:8082/api/v1/pix/keys
-      ITAU:URL: http://erp-itau:9091/api/v1/clientes
+      BCB_URL: http://bcb:8082
+      ITAU_URL: http://erp-itau:9091
 
 
   bcb:
